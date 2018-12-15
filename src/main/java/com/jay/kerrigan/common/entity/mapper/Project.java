@@ -3,15 +3,23 @@ package com.jay.kerrigan.common.entity.mapper;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 public class Project implements Serializable {
 	private static final long serialVersionUID = -743520012346990221L;
 
 	private String projectId;
+
+	@NotNull(message = "projectName cannot be empty")
 	private String projectName;
 	private String projectDesc;
 	private Date createDate;
 	private Date updateDate;
 
+	public static String getTableName() {
+		return "t_project";
+	}
+	
 	public String getProjectId() {
 		return projectId;
 	}

@@ -1,5 +1,7 @@
 package com.jay.kerrigan.common.model;
 
+import org.springframework.http.HttpStatus;
+
 public class ResponseModel<T> {
 
 	private boolean success;
@@ -18,12 +20,19 @@ public class ResponseModel<T> {
 		this.data = data;
 	}
 
+	public ResponseModel(boolean success, String message, HttpStatus httpStatus, T data) {
+		this.success = success;
+		this.message = message;
+		this.code = httpStatus.value();
+		this.data = data;
+	}
+
 	public ResponseModel(boolean success, String message, T data) {
-		this(success, message, 200, data);
+		this(success, message, HttpStatus.OK, data);
 	}
 
 	public static <T> ResponseModel<T> success(T data) {
-		return new ResponseModel<T>(true, "success", 200, data);
+		return new ResponseModel<T>(true, "success", HttpStatus.OK, data);
 	}
 
 	public static <T> ResponseModel<T> error() {
@@ -31,7 +40,7 @@ public class ResponseModel<T> {
 	}
 
 	public static <T> ResponseModel<T> error(String message) {
-		return new ResponseModel<T>(true, message, 200, null);
+		return new ResponseModel<T>(true, message, HttpStatus.OK, null);
 	}
 
 	public boolean isSuccess() {
