@@ -67,10 +67,9 @@ public class KerriganConfig {
 
 		if (KerriganMaster.class == Kerrigan.getKerriganRole()) {
 			HolderClass.instance.properties.put("server.port", 7000);
-			HolderClass.instance.properties.put("mybatis.config-location", "classpath:config/mybatis-config.xml");
-			HolderClass.instance.properties.put("mybatis.mapper-locations", "classpath:mapper/*.xml");
 			HolderClass.instance.properties.put("mybatis.type-aliases-package",
 					"com.jay.kerrigan.common.entity.mapper");
+			HolderClass.instance.properties.put("mybatis.configuration.map-underscore-to-camel-case", true);
 		}
 
 		if (KerriganSlave.class == Kerrigan.getKerriganRole()) {

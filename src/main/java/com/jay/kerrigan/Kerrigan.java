@@ -2,6 +2,7 @@ package com.jay.kerrigan;
 
 import org.springframework.boot.SpringApplication;
 
+import com.jay.kerrigan.common.config.KerriganBanner;
 import com.jay.kerrigan.common.config.KerriganConfig;
 
 public class Kerrigan {
@@ -23,6 +24,7 @@ public class Kerrigan {
 
 		KerriganConfig.loadConfig(kerriganRole);
 		SpringApplication kerriganApp = new SpringApplication(kerriganRole);
+		kerriganApp.setBanner(new KerriganBanner());
 		kerriganApp.setDefaultProperties(KerriganConfig.getAllConfig());
 		kerriganApp.run();
 	}
