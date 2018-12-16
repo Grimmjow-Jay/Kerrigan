@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -47,6 +49,20 @@ public class ErrorHandlerController implements ErrorController {
 		Iterator<ObjectError> iterator = e.getAllErrors().iterator();
 		while (iterator.hasNext()) {
 			builder.append(iterator.next().getDefaultMessage());
+			if (iterator.hasNext()) {
+				builder.append(", ");
+			}
+		}
+		return new ResponseModel<String>(false, builder.toString(), HttpStatus.BAD_REQUEST, null);
+	}
+
+	@ExceptionHandler(value = ConstraintViolationException.class)
+	public ResponseModel<String> handleConstraintViolationException(HttpServletRequest req,
+			ConstraintViolationException e) throws Exception {
+		StringBuilder builder = new StringBuilder();
+		Iterator<ConstraintViolation<?>> iterator = e.getConstraintViolations().iterator();
+		while (iterator.hasNext()) {
+			builder.append(iterator.next().getMessage());
 			if (iterator.hasNext()) {
 				builder.append(", ");
 			}

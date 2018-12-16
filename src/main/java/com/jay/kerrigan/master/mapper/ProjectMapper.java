@@ -26,9 +26,17 @@ public interface ProjectMapper {
 	@UpdateProvider(method = "deleteProject", type = ProjectProvider.class)
 	int deleteProject(Project project);
 
+	@SelectProvider(method = "fetchProjectById", type = ProjectProvider.class)
+	Project fetchProjectById(String projectId);
+
 	class ProjectProvider {
+
 		public String fetchAllProjects() {
 			return new SQL().SELECT("*").FROM(Project.getTableName()).toString();
+		}
+
+		public String fetchProjectById() {
+			return new SQL().SELECT("*").FROM(Project.getTableName()).WHERE("project_id=#{projectId}").toString();
 		}
 
 		public String createProject(Project project) {

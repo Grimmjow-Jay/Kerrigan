@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.FileSystemUtils;
 
 public class FileUtil {
 	private static Logger logger = LoggerFactory.getLogger(FileUtil.class);
@@ -60,5 +61,21 @@ public class FileUtil {
 				stream = null;
 			}
 		}
+	}
+
+	public static boolean deleteRecursively(File file) {
+		return FileSystemUtils.deleteRecursively(file);
+	}
+
+	public static boolean deleteRecursively(Iterable<File> files) {
+		if (files == null) {
+			return false;
+		}
+
+		boolean result = true;
+		for (File file : files) {
+			result = result && deleteRecursively(file);
+		}
+		return result;
 	}
 }

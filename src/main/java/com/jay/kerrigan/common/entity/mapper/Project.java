@@ -8,18 +8,18 @@ import javax.validation.constraints.NotNull;
 public class Project implements Serializable {
 	private static final long serialVersionUID = -743520012346990221L;
 
-	private String projectId;
+	protected String projectId;
 
 	@NotNull(message = "projectName cannot be empty")
-	private String projectName;
-	private String projectDesc;
-	private Date createDate;
-	private Date updateDate;
+	protected String projectName;
+	protected String projectDesc;
+	protected Date createDate;
+	protected Date updateDate;
 
 	public static String getTableName() {
 		return "t_project";
 	}
-	
+
 	public String getProjectId() {
 		return projectId;
 	}
@@ -58,6 +58,12 @@ public class Project implements Serializable {
 
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	@Override
+	public String toString() {
+		return "Project [projectId=" + projectId + ", projectName=" + projectName + ", projectDesc=" + projectDesc
+				+ ", createDate=" + createDate + ", updateDate=" + updateDate + "]";
 	}
 
 }

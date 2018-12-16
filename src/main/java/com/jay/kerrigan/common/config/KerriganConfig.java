@@ -57,7 +57,7 @@ public class KerriganConfig {
 
 	private static void loadDefaultConfig() {
 		HolderClass.instance.properties.put("logging.config", "classpath:config/logback-config.xml");
-		HolderClass.instance.properties.put("log.path", Kerrigan.class.getSimpleName());
+		HolderClass.instance.properties.put("log.path", "log");
 		HolderClass.instance.properties.put("log.file.pattern",
 				Kerrigan.getKerriganRole().getSimpleName() + ".%d{yyyy-MM-dd}.log");
 		HolderClass.instance.properties.put("server.tomcat.uri-encoding", "UTF-8");
@@ -66,19 +66,30 @@ public class KerriganConfig {
 		HolderClass.instance.properties.put("spring.jackson.time-zone", "GMT+8");
 
 		if (KerriganMaster.class == Kerrigan.getKerriganRole()) {
-			HolderClass.instance.properties.put("server.port", 7000);
-			HolderClass.instance.properties.put("mybatis.type-aliases-package",
-					"com.jay.kerrigan.common.entity.mapper");
-			HolderClass.instance.properties.put("mybatis.configuration.map-underscore-to-camel-case", true);
+			loadMasterDefaultConfig();
 		}
 
 		if (KerriganSlave.class == Kerrigan.getKerriganRole()) {
-			HolderClass.instance.properties.put("server.port", 7001);
+			loadSlaveDefaultConfig();
 		}
+	}
+
+	private static void loadMasterDefaultConfig() {
+		HolderClass.instance.properties.put("server.port", 7000);
+		HolderClass.instance.properties.put("mybatis.type-aliases-package", "com.jay.kerrigan.common.entity.mapper");
+		HolderClass.instance.properties.put("mybatis.configuration.map-underscore-to-camel-case", true);
+	}
+
+	private static void loadSlaveDefaultConfig() {
+		HolderClass.instance.properties.put("server.port", 7001);
 	}
 
 	public static Map<String, Object> getAllConfig() {
 		return new HashMap<>(HolderClass.instance.properties);
+	}
+
+	public static String getConfig(String key) {
+		return String.valueOf(HolderClass.instance.properties.get(key));
 	}
 
 	public static String getConfig(String key, String defaultValue) {
