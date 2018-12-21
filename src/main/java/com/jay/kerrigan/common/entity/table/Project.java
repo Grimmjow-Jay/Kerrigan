@@ -1,30 +1,44 @@
-package com.jay.kerrigan.common.entity.mapper;
+package com.jay.kerrigan.common.entity.table;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+@Entity
+@Table(name = "t_project")
 public class Project implements Serializable {
 	private static final long serialVersionUID = -743520012346990221L;
 
-	protected String projectId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "project_id", unique = true)
+	private Integer projectId;
 
 	@NotNull(message = "projectName cannot be empty")
-	protected String projectName;
-	protected String projectDesc;
-	protected Date createDate;
-	protected Date updateDate;
+	private String projectName;
+	private String projectDesc;
+	private Date createDate;
+	private Date updateDate;
 
-	public static String getTableName() {
-		return "t_project";
-	}
+	@OneToMany(mappedBy = "t_project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	protected List<Job> jobs;
 
-	public String getProjectId() {
+	public Integer getProjectId() {
 		return projectId;
 	}
 
-	public void setProjectId(String projectId) {
+	public void setProjectId(Integer projectId) {
 		this.projectId = projectId;
 	}
 
@@ -60,10 +74,18 @@ public class Project implements Serializable {
 		this.updateDate = updateDate;
 	}
 
+	public List<Job> getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(List<Job> jobs) {
+		this.jobs = jobs;
+	}
+
 	@Override
 	public String toString() {
 		return "Project [projectId=" + projectId + ", projectName=" + projectName + ", projectDesc=" + projectDesc
-				+ ", createDate=" + createDate + ", updateDate=" + updateDate + "]";
+				+ ", createDate=" + createDate + ", updateDate=" + updateDate + ", jobs=" + jobs + "]";
 	}
 
 }

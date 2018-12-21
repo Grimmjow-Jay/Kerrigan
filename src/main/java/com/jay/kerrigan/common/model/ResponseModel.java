@@ -40,7 +40,7 @@ public class ResponseModel<T> {
 	}
 
 	public static <T> ResponseModel<T> error(String message) {
-		return new ResponseModel<T>(true, message, HttpStatus.OK, null);
+		return new ResponseModel<T>(false, message, HttpStatus.OK, null);
 	}
 
 	public boolean isSuccess() {

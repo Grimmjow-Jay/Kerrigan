@@ -35,6 +35,7 @@
 	<logger name="org.hibernate" level="ERROR"></logger>
 	<logger name="com.zaxxer" level="ERROR"></logger>
 	<logger name="org.mybatis" level="INFO"></logger>
+	<logger name="io.netty" level="INFO"></logger>
 	<logger name="com.jay.kerrigan.master.mapper" level="INFO"></logger>
 
 	<!-- 日志输出级别 -->

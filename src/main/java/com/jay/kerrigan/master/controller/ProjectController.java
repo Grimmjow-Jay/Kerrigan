@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jay.kerrigan.common.entity.mapper.Project;
+import com.jay.kerrigan.common.entity.table.Project;
 import com.jay.kerrigan.common.model.ResponseModel;
 import com.jay.kerrigan.master.service.ProjectService;
 
@@ -37,14 +37,11 @@ public class ProjectController {
 			@NotEmpty(message = "projectId cannot be empty") String projectId) {
 		return ResponseModel.success(projectService.uploadFiles(files, projectId));
 	}
-	
-	
+
 	@RequestMapping("/remove_files")
 	public ResponseModel<Boolean> removeFiles(List<String> files,
 			@NotEmpty(message = "projectId cannot be empty") String projectId) {
 		return ResponseModel.success(projectService.removeFiles(files, projectId));
 	}
-	
-	
 
 }

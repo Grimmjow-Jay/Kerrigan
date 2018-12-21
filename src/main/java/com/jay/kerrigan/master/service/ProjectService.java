@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jay.kerrigan.common.entity.mapper.Project;
+import com.jay.kerrigan.common.entity.table.Project;
 
 public interface ProjectService {
 

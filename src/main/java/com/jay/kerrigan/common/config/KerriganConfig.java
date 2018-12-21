@@ -76,8 +76,6 @@ public class KerriganConfig {
 
 	private static void loadMasterDefaultConfig() {
 		HolderClass.instance.properties.put("server.port", 7000);
-		HolderClass.instance.properties.put("mybatis.type-aliases-package", "com.jay.kerrigan.common.entity.mapper");
-		HolderClass.instance.properties.put("mybatis.configuration.map-underscore-to-camel-case", true);
 	}
 
 	private static void loadSlaveDefaultConfig() {
