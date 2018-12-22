@@ -13,8 +13,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "t_project")
 public class Project implements Serializable {
@@ -22,63 +25,26 @@ public class Project implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "project_id", unique = true)
 	private Integer projectId;
 
-	@NotNull(message = "projectName cannot be empty")
+	@NotBlank(message = "projectName cannot be empty")
+	@Column(unique = true)
 	private String projectName;
 	private String projectDesc;
 	private Date createDate;
 	private Date updateDate;
 
-	@OneToMany(mappedBy = "t_project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	protected List<Job> jobs;
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Job> jobs;
 
-	public Integer getProjectId() {
-		return projectId;
+	public Project() {
 	}
 
-	public void setProjectId(Integer projectId) {
-		this.projectId = projectId;
-	}
-
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
+	public Project(String projectName, String projectDesc, Date createDate, Date updateDate, List<Job> jobs) {
 		this.projectName = projectName;
-	}
-
-	public String getProjectDesc() {
-		return projectDesc;
-	}
-
-	public void setProjectDesc(String projectDesc) {
 		this.projectDesc = projectDesc;
-	}
-
-	public Date getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
-	}
-
-	public List<Job> getJobs() {
-		return jobs;
-	}
-
-	public void setJobs(List<Job> jobs) {
 		this.jobs = jobs;
 	}
 

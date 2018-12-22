@@ -1,6 +1,7 @@
 package com.jay.kerrigan.common.exception;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,6 +13,12 @@ public class KerriganException extends RuntimeException {
 		super(message);
 	}
 
+	public static void assertCondition(boolean condition, String message) {
+		if (condition) {
+			throw new KerriganException(message);
+		}
+	}
+
 	public static void assertNotNull(Object object, String message) {
 		if (object == null) {
 			throw new KerriganException(message);
@@ -20,6 +27,12 @@ public class KerriganException extends RuntimeException {
 
 	public static void assertNotBlank(CharSequence cs, String message) {
 		if (StringUtils.isBlank(cs)) {
+			throw new KerriganException(message);
+		}
+	}
+
+	public static void assertNotEmpty(Map<?, ?> map, String message) {
+		if (map == null || map.isEmpty()) {
 			throw new KerriganException(message);
 		}
 	}

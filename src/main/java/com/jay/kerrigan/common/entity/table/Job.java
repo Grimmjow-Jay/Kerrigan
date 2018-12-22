@@ -5,19 +5,20 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "t_job")
 public class Job implements Serializable {
@@ -26,9 +27,9 @@ public class Job implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private String jobId;
+	private Integer jobId;
 
-	@NotNull(message = "jobName cannot be empty")
+	@NotBlank(message = "jobName cannot be empty")
 	private String jobName;
 	private String jobDesc;
 	private Date createDate;
@@ -39,11 +40,25 @@ public class Job implements Serializable {
 	@JsonBackReference // 防止对象的递归访问
 	private Project project;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "t_flow", joinColumns = { @JoinColumn(name = "job_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "flow_id") })
+	@ManyToMany(mappedBy = "jobs")
 	private List<Flow> flows;
-	
-	
+
+	public Job() {
+	}
+
+	public Job(String jobName, String jobDesc, Date createDate, Date updateDate, Project project, List<Flow> flows) {
+		this.jobName = jobName;
+		this.jobDesc = jobDesc;
+		this.createDate = createDate;
+		this.updateDate = updateDate;
+		this.project = project;
+		this.flows = flows;
+	}
+
+	@Override
+	public String toString() {
+		return "Job [jobId=" + jobId + ", jobName=" + jobName + ", jobDesc=" + jobDesc + ", createDate=" + createDate
+				+ ", updateDate=" + updateDate + ", project=" + project + ", flows=" + flows + "]";
+	}
 
 }

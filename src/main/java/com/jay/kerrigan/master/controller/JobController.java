@@ -14,11 +14,11 @@ import com.jay.kerrigan.master.service.JobService;
 @Validated
 public class JobController {
 
-//	@Autowired
-//	private JobService jobService;
-//
-//	@RequestMapping("/create_job")
-//	public ResponseModel<Boolean> createJob(Job job) {
-//		return ResponseModel.success(jobService.createJob(job));
-//	}
+	@Autowired
+	private JobService jobService;
+
+	@RequestMapping("/create_job")
+	public ResponseModel<Boolean> createJob(Job job) {
+		return ResponseModel.success(jobService.createJob(job));
+	}
 }
