@@ -3,6 +3,7 @@ package com.jay.kerrigan.common.config;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ResourceUtils;
@@ -39,7 +40,7 @@ public class KerriganConfig {
 
 		for (int i = 0, cols = lines.size(); i < cols; i++) {
 			String line = lines.get(i).trim();
-			if (StringUtils.isBlank(line)) {
+			if (StringUtils.isBlank(line) || line.startsWith("#")) {
 				continue;
 			}
 			int sepIndex = line.indexOf("=");
@@ -103,5 +104,16 @@ public class KerriganConfig {
 	public static long getConfig(String key, long defaultValue) {
 		Object property = HolderClass.instance.properties.get(key);
 		return property == null ? defaultValue : Long.parseLong(String.valueOf(property));
+	}
+
+	public static Map<String, Object> getConfigByPrefix(String prefix) {
+		Map<String, Object> config = new HashMap<>();
+		for (Entry<String, Object> entry : HolderClass.instance.properties.entrySet()) {
+			String key = entry.getKey();
+			if (key.startsWith(prefix)) {
+				config.put(key, entry.getValue());
+			}
+		}
+		return config;
 	}
 }
