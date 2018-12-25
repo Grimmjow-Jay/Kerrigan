@@ -1,5 +1,6 @@
 package com.jay.kerrigan.common.config;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,10 +9,11 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ResourceUtils;
 
+import com.google.common.collect.Maps;
+import com.google.common.io.Files;
 import com.jay.kerrigan.Kerrigan;
 import com.jay.kerrigan.KerriganMaster;
 import com.jay.kerrigan.KerriganSlave;
-import com.jay.kerrigan.common.util.FileUtil;
 
 public class KerriganConfig {
 
@@ -22,7 +24,7 @@ public class KerriganConfig {
 		private final static KerriganConfig instance = new KerriganConfig();
 	}
 
-	private Map<String, Object> properties = new HashMap<>();
+	private Map<String, Object> properties = Maps.newHashMap();
 
 	public static void loadConfig(Class<? extends Kerrigan> clazz) throws Exception {
 		loadDefaultConfig();
@@ -36,7 +38,7 @@ public class KerriganConfig {
 			throw new Exception("Load Config File Error.");
 		}
 
-		List<String> lines = FileUtil.readLines(ResourceUtils.getFile(path));
+		List<String> lines = Files.readLines(ResourceUtils.getFile(path), Charset.forName("UTF-8"));
 
 		for (int i = 0, cols = lines.size(); i < cols; i++) {
 			String line = lines.get(i).trim();
@@ -77,6 +79,8 @@ public class KerriganConfig {
 
 	private static void loadMasterDefaultConfig() {
 		HolderClass.instance.properties.put("server.port", 7000);
+		HolderClass.instance.properties.put("mybatis.type-aliases-package", "com.jay.kerrigan.common.entity.mapper");
+		HolderClass.instance.properties.put("mybatis.configuration.map-underscore-to-camel-case", true);
 	}
 
 	private static void loadSlaveDefaultConfig() {
