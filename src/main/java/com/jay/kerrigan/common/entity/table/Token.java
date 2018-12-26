@@ -1,11 +1,13 @@
 package com.jay.kerrigan.common.entity.table;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
 
 @Data
-public class Token {
+public class Token implements Serializable {
+	private static final long serialVersionUID = -786034845151336814L;
 
 	private String tokenId;
 	private String host;
