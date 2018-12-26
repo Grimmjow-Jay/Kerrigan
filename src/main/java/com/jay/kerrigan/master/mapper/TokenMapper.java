@@ -1,5 +1,7 @@
 package com.jay.kerrigan.master.mapper;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,6 +22,9 @@ public interface TokenMapper {
 
 	@UpdateProvider(type = TokenProvider.class, method = "updateToken")
 	int updateToken(Token token);
+
+	@DeleteProvider(type = TokenProvider.class, method = "deleteToken")
+	int deleteToken(Token token);
 
 	class TokenProvider {
 
@@ -50,6 +55,18 @@ public interface TokenMapper {
 					WHERE("host=#{host}", "user_name=#{userName}");
 				}
 			}.toString();
+		}
+
+		public String deleteToken(Token token) {
+			SQL sql = new SQL().DELETE_FROM(Token.getTableName());
+			if (!StringUtils.isBlank(token.getTokenId())) {
+				return sql.WHERE("token_id=#{tokenId}").toString();
+			}
+			sql.WHERE("host=#{host}");
+			if (!StringUtils.isBlank(token.getUserName())) {
+				sql.WHERE("user_name=#{userName}");
+			}
+			return sql.toString();
 		}
 
 	}

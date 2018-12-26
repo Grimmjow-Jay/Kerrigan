@@ -9,7 +9,15 @@ layui.use('form', function() {
 			type : 'POST',
 			dataType : 'json',
 			success : function(result) {
-				layer.msg(JSON.stringify(result));
+				$.ajax({
+					url : '/rest/logout',
+					data : data.field,
+					type : 'POST',
+					dataType : 'json',
+					success : function(result) {
+						layer.msg(JSON.stringify(result));
+					}
+				})
 			}
 		})
 		return false;

@@ -34,15 +34,13 @@ public class LoginServiceImpl implements LoginService {
 			token.setUpdateDate(now);
 			tokenMapper.updateToken(token);
 		}
-//		KerriganException.assertCondition(UserInfo.checkUser(userName, password), "Incorrect userName or password");
 
 		return token.getTokenId();
 	}
 
 	@Override
-	public boolean logout(String userName, String host) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean logout(String userName, String host, String token) {
+		return tokenMapper.deleteToken(new Token(token, host, userName, null, null)) == 1;
 	}
 
 }
