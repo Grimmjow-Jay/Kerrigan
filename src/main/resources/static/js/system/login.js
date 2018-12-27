@@ -9,7 +9,14 @@ layui.use('form', function() {
 			type : 'POST',
 			dataType : 'json',
 			success : function(result) {
-				
+				if (result.success) {
+					window.location.reload();
+				} else {
+					layer.alert(result.message, {
+						skin : 'layui-layer-lan',
+						closeBtn : 0
+					});
+				}
 			}
 		})
 		return false;

@@ -1,5 +1,8 @@
 package com.jay.kerrigan.master.controller.system;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +42,8 @@ public class TokenController {
 	}
 
 	@RequestMapping("/logout")
-	public ResponseModel<Boolean> logout(String userName, HttpServletRequest request, HttpServletResponse response) {
+	public ResponseModel<Boolean> logout(String userName, HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		String host = request.getRemoteAddr();
 		String tokenId = null;
 		for (Cookie cookie : request.getCookies()) {
@@ -55,6 +59,8 @@ public class TokenController {
 		response.addCookie(cookie);
 
 		request.getSession().removeAttribute("token");
+
+		response.sendRedirect("/");
 
 		return ResponseModel.success(true);
 

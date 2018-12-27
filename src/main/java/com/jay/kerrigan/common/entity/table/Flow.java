@@ -23,6 +23,10 @@ public class Flow implements Serializable {
 
 	private List<Job> jobs;
 
+	public static String getTableName() {
+		return "t_flow";
+	}
+
 	public Flow() {
 	}
 

@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import lombok.Data;
 
 @Data
@@ -22,9 +20,12 @@ public class Job implements Serializable {
 	private String jobDesc;
 	private Date createDate;
 	private Date updateDate;
-	@JsonBackReference // 防止对象的递归访问
 	private Project project;
 	private List<Flow> flows;
+
+	public static String getTableName() {
+		return "t_job";
+	}
 
 	public Job() {
 	}

@@ -22,6 +22,10 @@ public class Project implements Serializable {
 
 	private List<Job> jobs;
 
+	public static String getTableName() {
+		return "t_project";
+	}
+	
 	public Project() {
 	}
 
