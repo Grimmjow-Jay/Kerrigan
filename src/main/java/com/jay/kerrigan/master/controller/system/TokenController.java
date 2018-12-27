@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jay.kerrigan.common.model.ResponseModel;
-import com.jay.kerrigan.master.service.LoginService;
+import com.jay.kerrigan.master.service.TokenService;
 
 @RestController
 @RequestMapping("/rest")
-public class LoginController {
+public class TokenController {
 
 	@Autowired
-	private LoginService loginService;
+	private TokenService loginService;
 
 	@RequestMapping("/login")
 	public ResponseModel<String> login(String userName, String password, HttpServletRequest request,

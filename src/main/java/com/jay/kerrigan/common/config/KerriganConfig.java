@@ -110,6 +110,11 @@ public class KerriganConfig {
 		return property == null ? defaultValue : Long.parseLong(String.valueOf(property));
 	}
 
+	public static boolean getConfig(String key, boolean defaultValue) {
+		Object property = HolderClass.instance.properties.get(key);
+		return property == null ? defaultValue : Boolean.parseBoolean(String.valueOf(property));
+	}
+
 	public static Map<String, Object> getConfigByPrefix(String prefix) {
 		Map<String, Object> config = new HashMap<>();
 		for (Entry<String, Object> entry : HolderClass.instance.properties.entrySet()) {

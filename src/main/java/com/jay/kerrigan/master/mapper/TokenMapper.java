@@ -17,11 +17,17 @@ public interface TokenMapper {
 	@SelectProvider(type = TokenProvider.class, method = "getByTokenAndUserName")
 	Token getByUserNameAndHost(@Param("userName") String userName, @Param("host") String host);
 
+	@SelectProvider(type = TokenProvider.class, method = "getByHostAndTokenId")
+	Token getByHostAndTokenId(@Param("host") String host, @Param("tokenId") String tokenId);
+
 	@InsertProvider(type = TokenProvider.class, method = "insertToken")
 	int insertToken(Token token);
 
 	@UpdateProvider(type = TokenProvider.class, method = "updateToken")
 	int updateToken(Token token);
+
+	@UpdateProvider(type = TokenProvider.class, method = "extendExpireTime")
+	int extendExpireTime(Token token);
 
 	@DeleteProvider(type = TokenProvider.class, method = "deleteToken")
 	int deleteToken(Token token);
@@ -29,8 +35,13 @@ public interface TokenMapper {
 	class TokenProvider {
 
 		public String getByTokenAndUserName(String userName, String host) {
-			return new SQL().SELECT("*").FROM(Token.getTableName()).WHERE("user_name = #{userName}").AND()
-					.WHERE("host = #{host}").toString();
+			return new SQL().SELECT("*").FROM(Token.getTableName()).WHERE("user_name=#{userName}", "host=#{host}")
+					.toString();
+		}
+
+		public String getByHostAndTokenId(String host, String tokenId) {
+			return new SQL().SELECT("*").FROM(Token.getTableName()).WHERE("host = #{host}", "token_id = #{tokenId}")
+					.toString();
 		}
 
 		public String insertToken(Token token) {
@@ -53,6 +64,16 @@ public interface TokenMapper {
 					SET("token_id=#{tokenId}");
 					SET("update_date=#{updateDate}");
 					WHERE("host=#{host}", "user_name=#{userName}");
+				}
+			}.toString();
+		}
+
+		public String extendExpireTime(Token token) {
+			return new SQL() {
+				{
+					UPDATE(Token.getTableName());
+					SET("update_date=#{updateDate}");
+					WHERE("token_id=#{tokenId}");
 				}
 			}.toString();
 		}
