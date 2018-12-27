@@ -1,7 +1,6 @@
 package com.jay.kerrigan.master.service.impl;
 
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ import com.jay.kerrigan.master.service.TokenService;
 @Service
 @Transactional
 public class TokenServiceImpl implements TokenService {
-
-	private static final long TOKEN_EXPIRE_TIME = KerriganConfig.getConfig("system.authorization.token.expire",
-			TimeUnit.HOURS.toMillis(1));
 
 	@Autowired
 	private TokenMapper tokenMapper;
@@ -66,7 +62,7 @@ public class TokenServiceImpl implements TokenService {
 			return false;
 		}
 
-		if (oldToken.getUpdateDate().getTime() + TOKEN_EXPIRE_TIME < System.currentTimeMillis()) {
+		if (oldToken.getUpdateDate().getTime() + KerriganConfig.TOKEN_EXPIRE_MILLSECONDS < System.currentTimeMillis()) {
 			return false;
 		}
 

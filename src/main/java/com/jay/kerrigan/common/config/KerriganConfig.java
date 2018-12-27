@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ResourceUtils;
@@ -16,6 +17,9 @@ import com.jay.kerrigan.KerriganMaster;
 import com.jay.kerrigan.KerriganSlave;
 
 public class KerriganConfig {
+
+	public static final long TOKEN_EXPIRE_MILLSECONDS = getConfig("system.authorization.token.expire",
+			TimeUnit.HOURS.toMillis(1));
 
 	private KerriganConfig() {
 	}

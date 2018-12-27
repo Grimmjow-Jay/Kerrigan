@@ -3,6 +3,7 @@ package com.jay.kerrigan.common.interceptor;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
@@ -25,7 +26,7 @@ public class TokenInterceptor implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		String[] excludes = { "/", "/static/**", "/error", "/rest/login", "/rest/logout" };
+		String[] excludes = { "/", "/static/**", "/error", "/auth/**" };
 		registry.addInterceptor(new TokenInterceptorHolder()).addPathPatterns("/**").excludePathPatterns(excludes);
 	}
 
@@ -67,27 +68,39 @@ class TokenInterceptorHolder implements HandlerInterceptor {
 		Token token = new Token();
 		token.setHost(request.getRemoteAddr());
 
+		// Find token from session
+		HttpSession session = request.getSession(true);
+		if (session != null) {
+			token.setTokenId(String.valueOf(session.getAttribute("token")));
+			if (tokenService.checkAndUpdateToken(token)) {
+				return true;
+			}
+		}
+
 		// Find token from cookie
 		Cookie[] cookies = request.getCookies();
 		cookies = cookies == null ? new Cookie[0] : cookies;
 		for (Cookie cookie : cookies) {
 			if (StringUtils.equals(cookie.getName(), "token")) {
 				token.setTokenId(cookie.getValue());
-				return tokenService.checkAndUpdateToken(token);
+				if (tokenService.checkAndUpdateToken(token)) {
+					session.setAttribute("token", token.getTokenId());
+					session.setMaxInactiveInterval((int) (KerriganConfig.TOKEN_EXPIRE_MILLSECONDS / 1000));
+					return true;
+				}
 			}
 		}
 
 		// Find token from parameters
 		String tokenId = request.getParameter("token");
-		if (StringUtils.isBlank(tokenId)) {
-			return false;
-		}
-
 		token.setTokenId(tokenId);
 		if (tokenService.checkAndUpdateToken(token)) {
+			session.setAttribute("token", token.getTokenId());
+			session.setMaxInactiveInterval((int) (KerriganConfig.TOKEN_EXPIRE_MILLSECONDS / 1000));
 			return true;
 		}
 
+		// Do not found token still
 		response.setStatus(HttpStatus.UNAUTHORIZED.value());
 		request.getRequestDispatcher("/error").forward(request, response);
 		return false;
