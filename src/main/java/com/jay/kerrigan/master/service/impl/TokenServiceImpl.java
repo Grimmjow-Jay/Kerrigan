@@ -46,7 +46,8 @@ public class TokenServiceImpl implements TokenService {
 
 	@Override
 	public boolean logout(String userName, String host, String token) {
-		return tokenMapper.deleteToken(new Token(token, host, userName, null, null)) == 1;
+		tokenMapper.deleteToken(new Token(token, host, userName, null, null));
+		return true;
 	}
 
 	@Override

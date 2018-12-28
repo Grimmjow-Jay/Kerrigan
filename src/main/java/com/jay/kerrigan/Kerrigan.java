@@ -18,15 +18,15 @@ public class Kerrigan {
 		if (args == null || args.length != 1) {
 			throw new Exception("Input args : master or slave");
 		}
-		if ("master".equals(args[0])) {
+		if ("master".equalsIgnoreCase(args[0])) {
 			kerriganRole = KerriganMaster.class;
-		} else if ("slave".equals(args[0])) {
+		} else if ("slave".equalsIgnoreCase(args[0])) {
 			kerriganRole = KerriganSlave.class;
 		} else {
 			throw new Exception("Input args : master or slave");
 		}
 
-		KerriganConfig.loadConfig(kerriganRole);
+		KerriganConfig.loadConfig();
 		SpringApplication kerriganApp = new SpringApplication(kerriganRole);
 		kerriganApp.setBanner(new KerriganBanner());
 		kerriganApp.setDefaultProperties(KerriganConfig.getAllConfig());

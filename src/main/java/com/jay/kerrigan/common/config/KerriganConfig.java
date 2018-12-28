@@ -9,11 +9,9 @@ import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ResourceUtils;
 
-import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.jay.kerrigan.Kerrigan;
 import com.jay.kerrigan.KerriganMaster;
-import com.jay.kerrigan.KerriganSlave;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,24 +21,28 @@ public class KerriganConfig {
 	private KerriganConfig() {
 	}
 
-	private static class HolderClass {
-		private final static KerriganConfig instance = new KerriganConfig();
-	}
+	private static final KerriganProperties properties = new KerriganProperties();
 
-	private Map<String, Object> properties = Maps.newHashMap();
+	public static final void loadConfig() throws Exception {
 
-	public static void loadConfig(Class<? extends Kerrigan> clazz) throws Exception {
 		loadDefaultConfig();
 
-		String path = null;
-		if (KerriganMaster.class == clazz) {
-			path = "classpath:config/kerrigan-master.conf";
-		} else if (KerriganSlave.class == clazz) {
-			path = "classpath:config/kerrigan-slave.conf";
+		if (KerriganMaster.class == Kerrigan.getKerriganRole()) {
+			loadMasterDefaultConfig();
+			loadConfigFromFile("classpath:config/kerrigan-master.conf");
+			properties.loadDefaultComplated = true;
+			loadMasterConstantConfig();
 		} else {
-			throw new Exception("Load Config File Error.");
+			loadSlaveDefaultConfig();
+			loadConfigFromFile("classpath:config/kerrigan-slave.conf");
+			properties.loadDefaultComplated = true;
+			loadSlaveConstantConfig();
 		}
 
+		loadConstantConfig();
+	}
+
+	private static void loadConfigFromFile(String path) throws Exception {
 		List<String> lines = Files.readLines(ResourceUtils.getFile(path), Charset.forName("UTF-8"));
 
 		for (int i = 0, cols = lines.size(); i < cols; i++) {
@@ -57,56 +59,71 @@ public class KerriganConfig {
 			if (StringUtils.isAnyBlank(key, value)) {
 				throw new Exception("Config error [" + path + "]: at line " + i + " " + line);
 			}
-			HolderClass.instance.properties.put(key, value);
+			properties.put(key, value);
 		}
 	}
 
+	/**
+	 * Default config properties. Can be overwrite.
+	 */
 	private static void loadDefaultConfig() {
-		HolderClass.instance.properties.put("logging.config", "classpath:config/logback-config.xml");
-		HolderClass.instance.properties.put("log.path", "log");
-		HolderClass.instance.properties.put("log.file.pattern",
-				Kerrigan.getKerriganRole().getSimpleName() + ".%d{yyyy-MM-dd}.log");
-		HolderClass.instance.properties.put("server.tomcat.uri-encoding", "UTF-8");
-		HolderClass.instance.properties.put("spring.aop.proxy-target-class", true);
-		HolderClass.instance.properties.put("spring.jackson.date-format", "yyyy-MM-dd HH:mm:ss.SSS");
-		HolderClass.instance.properties.put("spring.jackson.time-zone", "GMT+8");
-
-		if (KerriganMaster.class == Kerrigan.getKerriganRole()) {
-			loadMasterDefaultConfig();
-		}
-
-		if (KerriganSlave.class == Kerrigan.getKerriganRole()) {
-			loadSlaveDefaultConfig();
-		}
+		properties.put("logging.config", "classpath:config/logback-config.xml");
+		properties.put("log.path", "log");
+		properties.put("log.file.pattern", Kerrigan.getKerriganRole().getSimpleName() + ".%d{yyyy-MM-dd}.log");
 	}
 
 	private static void loadMasterDefaultConfig() {
-		HolderClass.instance.properties.put("server.port", 7000);
-		HolderClass.instance.properties.put("mybatis.type-aliases-package", "com.jay.kerrigan.common.entity.mapper");
-		HolderClass.instance.properties.put("mybatis.configuration.map-underscore-to-camel-case", true);
+		properties.put("server.port", 7000);
+	}
+
+	private static void loadMasterConstantConfig() {
+		properties.put("mybatis.type-aliases-package", "com.jay.kerrigan.common.entity.mapper");
+		properties.put("mybatis.configuration.map-underscore-to-camel-case", true);
+		properties.put("spring.thymeleaf.prefix", "classpath:templates/");
+		properties.put("spring.thymeleaf.suffix", ".html");
+		properties.put("spring.thymeleaf.mode", "HTML");
+		properties.put("spring.thymeleaf.encoding", "UTF-8");
+		properties.put("spring.thymeleaf.servlet.content-type", "text/html");
+		properties.put("spring.thymeleaf.cache", false);
 	}
 
 	private static void loadSlaveDefaultConfig() {
-		HolderClass.instance.properties.put("server.port", 7001);
+		properties.put("server.port", 7001);
+	}
+
+	private static void loadSlaveConstantConfig() {
+
+	}
+
+	/**
+	 * Constant config properties. Can't be overwrite.
+	 */
+	private static void loadConstantConfig() {
+		properties.put("server.tomcat.uri-encoding", "UTF-8");
+		properties.put("spring.aop.proxy-target-class", true);
+		properties.put("spring.jackson.date-format", "yyyy-MM-dd HH:mm:ss.SSS");
+		properties.put("spring.jackson.time-zone", "GMT+8");
+		properties.put("spring.jackson.default-property-inclusion", "non-null");
 	}
 
 	public static Map<String, Object> getAllConfig() {
-		return new HashMap<>(HolderClass.instance.properties);
+		return new HashMap<>(properties);
 	}
 
 	public static String getConfig(String key) {
-		return String.valueOf(HolderClass.instance.properties.get(key));
+		Object property = properties.get(key);
+		return property == null ? null : property.toString();
 	}
 
 	public static String getConfig(String key, String defaultValue) {
-		Object property = HolderClass.instance.properties.get(key);
-		return property == null ? defaultValue : String.valueOf(property);
+		Object property = properties.get(key);
+		return property == null ? defaultValue : property.toString();
 	}
 
 	public static int getConfig(String key, int defaultValue) {
-		Object property = HolderClass.instance.properties.get(key);
+		Object property = properties.get(key);
 		try {
-			return property == null ? defaultValue : Integer.parseInt(String.valueOf(property));
+			return property == null ? defaultValue : Integer.parseInt(property.toString());
 		} catch (NumberFormatException e) {
 			log.error("Config property:[" + key + "] isn't a Integer. Return default value: [" + defaultValue + "]");
 			return defaultValue;
@@ -114,9 +131,9 @@ public class KerriganConfig {
 	}
 
 	public static long getConfig(String key, long defaultValue) {
-		Object property = HolderClass.instance.properties.get(key);
+		Object property = properties.get(key);
 		try {
-			return property == null ? defaultValue : Long.parseLong(String.valueOf(property));
+			return property == null ? defaultValue : Long.parseLong(property.toString());
 		} catch (NumberFormatException e) {
 			log.error("Config property:[" + key + "] isn't a Long. Return default value: [" + defaultValue + "]");
 			return defaultValue;
@@ -124,9 +141,9 @@ public class KerriganConfig {
 	}
 
 	public static boolean getConfig(String key, boolean defaultValue) {
-		Object property = HolderClass.instance.properties.get(key);
+		Object property = properties.get(key);
 		try {
-			return property == null ? defaultValue : Boolean.parseBoolean(String.valueOf(property));
+			return property == null ? defaultValue : Boolean.parseBoolean(property.toString());
 		} catch (NumberFormatException e) {
 			log.error("Config property:[" + key + "] isn't a Boolean. Return default value: [" + defaultValue + "]");
 			return defaultValue;
@@ -135,12 +152,31 @@ public class KerriganConfig {
 
 	public static Map<String, Object> getConfigByPrefix(String prefix) {
 		Map<String, Object> config = new HashMap<>();
-		for (Entry<String, Object> entry : HolderClass.instance.properties.entrySet()) {
+		for (Entry<String, Object> entry : properties.entrySet()) {
 			String key = entry.getKey();
 			if (key.startsWith(prefix)) {
 				config.put(key, entry.getValue());
 			}
 		}
 		return config;
+	}
+
+	static class KerriganProperties extends HashMap<String, Object> {
+		private static final long serialVersionUID = -8120810413140505541L;
+
+		private boolean loadDefaultComplated = false;
+
+		@Override
+		public Object put(String key, Object value) {
+			if (!loadDefaultComplated) {
+				return super.put(key, value);
+			}
+			Object oldValue = get(key);
+			if (oldValue != null && !oldValue.equals(value)) {
+				log.info("Config property: [" + key + "] cannot be overwrite. Default value is [" + value + "]");
+			}
+			return oldValue;
+		}
+
 	}
 }
