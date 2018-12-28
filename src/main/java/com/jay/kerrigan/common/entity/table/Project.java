@@ -25,7 +25,7 @@ public class Project implements Serializable {
 	public static String getTableName() {
 		return "t_project";
 	}
-	
+
 	public Project() {
 	}
 

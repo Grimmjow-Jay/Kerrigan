@@ -1,5 +1,7 @@
 package com.jay.kerrigan.master.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,5 +22,10 @@ public class JobController {
 	@RequestMapping("/create_job")
 	public ResponseModel<Boolean> createJob(Job job) {
 		return ResponseModel.success(jobService.createJob(job));
+	}
+
+	@RequestMapping("/fetch_all")
+	public ResponseModel<List<Job>> fetchAll() {
+		return ResponseModel.success(jobService.fetchAll());
 	}
 }

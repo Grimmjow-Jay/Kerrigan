@@ -1,5 +1,7 @@
 package com.jay.kerrigan.common.interceptor;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +42,8 @@ public class TokenInterceptor implements WebMvcConfigurer {
 class TokenInterceptorHolder implements HandlerInterceptor {
 
 	private static TokenService tokenService = getTokenMapperBean();
-
+	private static final long TOKEN_EXPIRE_MILLSECONDS = KerriganConfig.getConfig("system.authorization.token.expire",
+			TimeUnit.HOURS.toMillis(1));
 	private static final boolean AUTHORIZATION_OPEN = KerriganConfig.getConfig("system.authorization.open", true);
 
 	private static TokenService getTokenMapperBean() {
@@ -85,7 +88,7 @@ class TokenInterceptorHolder implements HandlerInterceptor {
 				token.setTokenId(cookie.getValue());
 				if (tokenService.checkAndUpdateToken(token)) {
 					session.setAttribute("token", token.getTokenId());
-					session.setMaxInactiveInterval((int) (KerriganConfig.TOKEN_EXPIRE_MILLSECONDS / 1000));
+					session.setMaxInactiveInterval((int) (TOKEN_EXPIRE_MILLSECONDS / 1000));
 					return true;
 				}
 			}
@@ -96,7 +99,7 @@ class TokenInterceptorHolder implements HandlerInterceptor {
 		token.setTokenId(tokenId);
 		if (tokenService.checkAndUpdateToken(token)) {
 			session.setAttribute("token", token.getTokenId());
-			session.setMaxInactiveInterval((int) (KerriganConfig.TOKEN_EXPIRE_MILLSECONDS / 1000));
+			session.setMaxInactiveInterval((int) (TOKEN_EXPIRE_MILLSECONDS / 1000));
 			return true;
 		}
 

@@ -18,7 +18,7 @@ public class ProjectServiceImpl implements ProjectService {
 	private ProjectMapper projectMapper;
 
 	@Override
-	public List<Project> fetchAllProjects() {
+	public List<Project> fetchAll() {
 		List<Project> fetchAll = projectMapper.fetchAll();
 		return fetchAll;
 	}

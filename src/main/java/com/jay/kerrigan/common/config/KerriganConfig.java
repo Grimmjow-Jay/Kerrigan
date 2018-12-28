@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ResourceUtils;
@@ -16,10 +15,10 @@ import com.jay.kerrigan.Kerrigan;
 import com.jay.kerrigan.KerriganMaster;
 import com.jay.kerrigan.KerriganSlave;
 
-public class KerriganConfig {
+import lombok.extern.slf4j.Slf4j;
 
-	public static final long TOKEN_EXPIRE_MILLSECONDS = getConfig("system.authorization.token.expire",
-			TimeUnit.HOURS.toMillis(1));
+@Slf4j
+public class KerriganConfig {
 
 	private KerriganConfig() {
 	}
@@ -106,17 +105,32 @@ public class KerriganConfig {
 
 	public static int getConfig(String key, int defaultValue) {
 		Object property = HolderClass.instance.properties.get(key);
-		return property == null ? defaultValue : Integer.parseInt(String.valueOf(property));
+		try {
+			return property == null ? defaultValue : Integer.parseInt(String.valueOf(property));
+		} catch (NumberFormatException e) {
+			log.error("Config property:[" + key + "] isn't a Integer. Return default value: [" + defaultValue + "]");
+			return defaultValue;
+		}
 	}
 
 	public static long getConfig(String key, long defaultValue) {
 		Object property = HolderClass.instance.properties.get(key);
-		return property == null ? defaultValue : Long.parseLong(String.valueOf(property));
+		try {
+			return property == null ? defaultValue : Long.parseLong(String.valueOf(property));
+		} catch (NumberFormatException e) {
+			log.error("Config property:[" + key + "] isn't a Long. Return default value: [" + defaultValue + "]");
+			return defaultValue;
+		}
 	}
 
 	public static boolean getConfig(String key, boolean defaultValue) {
 		Object property = HolderClass.instance.properties.get(key);
-		return property == null ? defaultValue : Boolean.parseBoolean(String.valueOf(property));
+		try {
+			return property == null ? defaultValue : Boolean.parseBoolean(String.valueOf(property));
+		} catch (NumberFormatException e) {
+			log.error("Config property:[" + key + "] isn't a Boolean. Return default value: [" + defaultValue + "]");
+			return defaultValue;
+		}
 	}
 
 	public static Map<String, Object> getConfigByPrefix(String prefix) {

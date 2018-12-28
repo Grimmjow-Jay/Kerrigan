@@ -8,17 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.jay.kerrigan.common.config.KerriganConfig;
 import com.jay.kerrigan.common.entity.table.Token;
 import com.jay.kerrigan.master.service.TokenService;
 
 @Controller
 public class PageLocationController {
 
+	private static final boolean AUTHORIZATION_OPEN = KerriganConfig.getConfig("system.authorization.open", true);
+
 	@Autowired
 	private TokenService tokenService;
 
 	@RequestMapping("/")
 	public String toLogin(HttpServletRequest request) {
+		if (!AUTHORIZATION_OPEN) {
+			return "kerrigan/index";
+		}
 		Token token = new Token();
 		token.setHost(request.getRemoteAddr());
 

@@ -24,7 +24,7 @@ public class ProjectController {
 
 	@RequestMapping("/fetch_all")
 	public ResponseModel<List<Project>> fetchAllProjects() {
-		return ResponseModel.success(projectService.fetchAllProjects());
+		return ResponseModel.success(projectService.fetchAll());
 	}
 
 	@RequestMapping("/create_project")

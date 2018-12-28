@@ -1,6 +1,7 @@
 package com.jay.kerrigan.master.controller.system;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -20,6 +21,9 @@ import com.jay.kerrigan.master.service.TokenService;
 @RequestMapping("/auth")
 public class TokenController {
 
+	private static final long TOKEN_EXPIRE_MILLSECONDS = KerriganConfig.getConfig("system.authorization.token.expire",
+			TimeUnit.HOURS.toMillis(1));
+
 	@Autowired
 	private TokenService loginService;
 
@@ -35,7 +39,7 @@ public class TokenController {
 		// Set token in session
 		HttpSession session = request.getSession(true);
 		session.setAttribute("token", token);
-		session.setMaxInactiveInterval((int) (KerriganConfig.TOKEN_EXPIRE_MILLSECONDS / 1000));
+		session.setMaxInactiveInterval((int) (TOKEN_EXPIRE_MILLSECONDS / 1000));
 
 		// return token
 		return ResponseModel.success(token);

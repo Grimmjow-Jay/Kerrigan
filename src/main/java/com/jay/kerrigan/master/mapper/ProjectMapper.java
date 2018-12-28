@@ -19,11 +19,17 @@ public interface ProjectMapper {
 	@SelectProvider(type = ProjectProvider.class, method = "fetchAll")
 	List<Project> fetchAll();
 
+	@SelectProvider(type = ProjectProvider.class, method = "fetchById")
+	Project fetchById(int projectId);
+
 	class ProjectProvider {
 
 		public String fetchAll() {
-
 			return new SQL().SELECT("*").FROM(Project.getTableName()).toString();
+		}
+
+		public String fetchById() {
+			return new SQL().SELECT("*").FROM(Project.getTableName()).WHERE("project_id = #{projectId}").toString();
 		}
 
 	}

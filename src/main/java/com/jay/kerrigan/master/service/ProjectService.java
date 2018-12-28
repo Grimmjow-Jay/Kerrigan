@@ -9,7 +9,7 @@ import com.jay.kerrigan.common.entity.table.Project;
 
 public interface ProjectService {
 
-	List<Project> fetchAllProjects();
+	List<Project> fetchAll();
 
 	String createProject(Project project);
 
