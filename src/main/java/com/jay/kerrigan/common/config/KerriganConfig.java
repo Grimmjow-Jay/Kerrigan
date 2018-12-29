@@ -174,8 +174,9 @@ public class KerriganConfig {
 			Object oldValue = get(key);
 			if (oldValue != null && !oldValue.equals(value)) {
 				log.info("Config property: [" + key + "] cannot be overwrite. Default value is [" + value + "]");
+				return oldValue;
 			}
-			return oldValue;
+			return super.put(key, value);
 		}
 
 	}

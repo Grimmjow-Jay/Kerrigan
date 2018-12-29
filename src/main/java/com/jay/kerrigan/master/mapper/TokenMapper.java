@@ -14,7 +14,7 @@ import com.jay.kerrigan.common.entity.table.Token;
 @Mapper
 public interface TokenMapper {
 
-	@SelectProvider(type = TokenProvider.class, method = "getByTokenAndUserName")
+	@SelectProvider(type = TokenProvider.class, method = "getByUserNameAndHost")
 	Token getByUserNameAndHost(@Param("userName") String userName, @Param("host") String host);
 
 	@SelectProvider(type = TokenProvider.class, method = "getByHostAndTokenId")
@@ -34,7 +34,7 @@ public interface TokenMapper {
 
 	class TokenProvider {
 
-		public String getByTokenAndUserName(String userName, String host) {
+		public String getByUserNameAndHost(String userName, String host) {
 			return new SQL().SELECT("*").FROM(Token.getTableName()).WHERE("user_name=#{userName}", "host=#{host}")
 					.toString();
 		}
