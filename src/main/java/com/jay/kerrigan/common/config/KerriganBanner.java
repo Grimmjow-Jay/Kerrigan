@@ -6,8 +6,8 @@ import org.springframework.boot.Banner;
 import org.springframework.core.env.Environment;
 
 import com.jay.kerrigan.Kerrigan;
-import com.jay.kerrigan.KerriganMaster;
-import com.jay.kerrigan.KerriganSlave;
+import com.jay.kerrigan.master.KerriganMaster;
+import com.jay.kerrigan.slave.KerriganSlave;
 
 public class KerriganBanner implements Banner {
 

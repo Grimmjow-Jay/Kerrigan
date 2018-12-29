@@ -7,6 +7,13 @@ import org.springframework.util.ResourceUtils;
 
 public class KerriganEnv {
 
+	/**
+	 * <pre>
+	 * First: If environment variables contails KERRIGAN_HOME, return this environment variable
+	 * Second: If config properties contails kerrigan.home, return this properties
+	 * Last: Return the kerrigan project running path
+	 * </pre>
+	 */
 	public static final String KERRIGAN_HOME = getKerriganHome();
 
 	public static final String TEMP_PATH = KERRIGAN_HOME + File.separator + "temp";

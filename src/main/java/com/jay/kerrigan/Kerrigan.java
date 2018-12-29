@@ -7,6 +7,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 
 import com.jay.kerrigan.common.config.KerriganBanner;
 import com.jay.kerrigan.common.config.KerriganConfig;
+import com.jay.kerrigan.master.KerriganMaster;
+import com.jay.kerrigan.slave.KerriganSlave;
 
 public class Kerrigan {
 

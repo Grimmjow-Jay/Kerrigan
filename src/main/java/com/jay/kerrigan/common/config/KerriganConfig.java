@@ -11,7 +11,7 @@ import org.springframework.util.ResourceUtils;
 
 import com.google.common.io.Files;
 import com.jay.kerrigan.Kerrigan;
-import com.jay.kerrigan.KerriganMaster;
+import com.jay.kerrigan.master.KerriganMaster;
 
 import lombok.extern.slf4j.Slf4j;
 

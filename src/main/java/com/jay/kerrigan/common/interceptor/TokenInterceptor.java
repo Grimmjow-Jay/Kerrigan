@@ -18,10 +18,10 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.jay.kerrigan.Kerrigan;
-import com.jay.kerrigan.KerriganSlave;
 import com.jay.kerrigan.common.config.KerriganConfig;
 import com.jay.kerrigan.common.entity.table.Token;
 import com.jay.kerrigan.master.service.TokenService;
+import com.jay.kerrigan.slave.KerriganSlave;
 
 @Configuration
 public class TokenInterceptor implements WebMvcConfigurer {
