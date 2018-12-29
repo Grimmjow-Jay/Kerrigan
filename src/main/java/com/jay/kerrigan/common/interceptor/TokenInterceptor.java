@@ -41,10 +41,11 @@ public class TokenInterceptor implements WebMvcConfigurer {
 
 class TokenInterceptorHolder implements HandlerInterceptor {
 
-	private static TokenService tokenService = getTokenMapperBean();
 	private static final long TOKEN_EXPIRE_MILLSECONDS = KerriganConfig.getConfig("system.authorization.token.expire",
 			TimeUnit.HOURS.toMillis(1));
 	private static final boolean AUTHORIZATION_OPEN = KerriganConfig.getConfig("system.authorization.open", true);
+
+	private static final String[] BROWSER_SIGN = { "Mozilla", "AppleWebKit", "Chrome", "Safari", "Firefox", "Edge" };
 
 	private static TokenService getTokenMapperBean() {
 		try {
@@ -59,7 +60,13 @@ class TokenInterceptorHolder implements HandlerInterceptor {
 			throws Exception {
 
 		// KerriganSlave don't check token
-		if (Kerrigan.getKerriganRole() == KerriganSlave.class || tokenService == null) {
+		if (Kerrigan.getKerriganRole() == KerriganSlave.class) {
+			return true;
+		}
+
+		// If TokenService is not available, return true
+		final TokenService tokenService = getTokenMapperBean();
+		if (tokenService == null) {
 			return true;
 		}
 
@@ -104,8 +111,17 @@ class TokenInterceptorHolder implements HandlerInterceptor {
 		}
 
 		// Do not found token still
-		response.setStatus(HttpStatus.UNAUTHORIZED.value());
-		request.getRequestDispatcher("/error").forward(request, response);
+		// If request comes from browser but not an ajax, forward to login page
+		// else forward to error page
+		if ("GET".equalsIgnoreCase(request.getMethod())
+				&& !"XMLHttpRequest".equals(request.getHeader("x-requested-with"))
+				&& StringUtils.containsAny(request.getHeader("user-agent"), BROWSER_SIGN)) {
+			response.sendRedirect("/");
+		} else {
+			response.setStatus(HttpStatus.UNAUTHORIZED.value());
+			request.getRequestDispatcher("/error").forward(request, response);
+		}
+
 		return false;
 	}
 

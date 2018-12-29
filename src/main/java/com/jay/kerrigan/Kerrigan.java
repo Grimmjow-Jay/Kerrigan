@@ -37,10 +37,18 @@ public class Kerrigan {
 		return kerriganRole;
 	}
 
-	public static <T> T getBean(Class<T> clazz) throws BeansException {
+	public static <T> T getBean(Class<T> requiredType) throws BeansException {
 		if (applicationContext == null) {
 			throw new ApplicationContextException("ApplicationContext is not available");
 		}
-		return applicationContext.getBean(clazz);
+		return applicationContext.getBean(requiredType);
+	}
+
+	public static <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+		if (applicationContext == null) {
+			throw new ApplicationContextException("ApplicationContext is not available");
+		}
+		return applicationContext.getBean(name, requiredType);
+
 	}
 }
