@@ -28,19 +28,19 @@ public class ProjectController {
 	}
 
 	@RequestMapping("/create_project")
-	public ResponseModel<String> createProject(@Validated Project project) {
+	public ResponseModel<Integer> createProject(@Validated Project project) {
 		return ResponseModel.success(projectService.createProject(project));
 	}
 
 	@RequestMapping("/upload_files")
 	public ResponseModel<Boolean> uploadFiles(List<MultipartFile> files,
-			@NotEmpty(message = "projectId cannot be empty") String projectId) {
+			@NotEmpty(message = "projectId cannot be empty") Integer projectId) {
 		return ResponseModel.success(projectService.uploadFiles(files, projectId));
 	}
 
 	@RequestMapping("/remove_files")
 	public ResponseModel<Boolean> removeFiles(List<String> files,
-			@NotEmpty(message = "projectId cannot be empty") String projectId) {
+			@NotEmpty(message = "projectId cannot be empty") Integer projectId) {
 		return ResponseModel.success(projectService.removeFiles(files, projectId));
 	}
 

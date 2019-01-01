@@ -11,15 +11,15 @@ public interface ProjectService {
 
 	List<Project> fetchAll();
 
-	String createProject(Project project);
+	Integer createProject(Project project);
 
 	boolean updateProject(Project project);
 
 	boolean deleteProject(Project project);
 
-	boolean uploadFiles(List<MultipartFile> files, String projectId);
+	boolean uploadFiles(List<MultipartFile> files, Integer projectId);
 
-	boolean removeFiles(List<String> files, String projectId);
+	boolean removeFiles(List<String> files, Integer projectId);
 
-	List<File> fetchFilesOfProject(String projectId);
+	List<File> fetchFilesOfProject(Integer projectId);
 }

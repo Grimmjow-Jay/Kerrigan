@@ -1,4 +1,4 @@
-package com.jay.kerrigan.master.controller.system;
+package com.jay.kerrigan.master.controller;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;

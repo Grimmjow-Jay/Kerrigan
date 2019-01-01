@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.jay.kerrigan.common.entity.table.Flow;
 import com.jay.kerrigan.common.entity.table.Job;
@@ -12,6 +13,7 @@ import com.jay.kerrigan.master.mapper.JobMapper;
 import com.jay.kerrigan.master.service.JobService;
 
 @Service
+@Transactional
 public class JobServiceImpl implements JobService {
 
 	@Autowired

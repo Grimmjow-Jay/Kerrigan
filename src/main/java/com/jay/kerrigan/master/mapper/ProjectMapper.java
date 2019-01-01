@@ -2,6 +2,7 @@ package com.jay.kerrigan.master.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Many;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Result;
@@ -22,6 +23,9 @@ public interface ProjectMapper {
 	@SelectProvider(type = ProjectProvider.class, method = "fetchById")
 	Project fetchById(int projectId);
 
+	@InsertProvider(type = ProjectProvider.class, method = "createProject")
+	int createProject(Project project);
+
 	class ProjectProvider {
 
 		public String fetchAll() {
@@ -30,6 +34,18 @@ public interface ProjectMapper {
 
 		public String fetchById() {
 			return new SQL().SELECT("*").FROM(Project.getTableName()).WHERE("project_id = #{projectId}").toString();
+		}
+
+		public String createProject(Project project) {
+			return new SQL() {
+				{
+					INSERT_INTO(Project.getTableName());
+					VALUES("project_name", "#{projectName}");
+					VALUES("project_desc", "#{projectDesc}");
+					VALUES("create_date", "#{createDate}");
+					VALUES("update_date", "#{updateDate}");
+				}
+			}.toString();
 		}
 
 	}
