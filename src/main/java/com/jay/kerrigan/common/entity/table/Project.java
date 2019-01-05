@@ -21,9 +21,14 @@ public class Project implements Serializable {
 	private Date updateDate;
 
 	private List<Job> jobs;
+	private List<String> files;
 
 	public static String getTableName() {
 		return "t_project";
+	}
+	
+	public static String getProjectFilesTableName() {
+		return "t_project_file";
 	}
 
 	public Project() {
@@ -40,7 +45,8 @@ public class Project implements Serializable {
 	@Override
 	public String toString() {
 		return "Project [projectId=" + projectId + ", projectName=" + projectName + ", projectDesc=" + projectDesc
-				+ ", createDate=" + createDate + ", updateDate=" + updateDate + ", jobs=" + jobs + "]";
+				+ ", createDate=" + createDate + ", updateDate=" + updateDate + ", jobs=" + jobs + ", files=" + files
+				+ "]";
 	}
 
 }

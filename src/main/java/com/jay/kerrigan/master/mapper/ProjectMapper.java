@@ -16,7 +16,8 @@ import com.jay.kerrigan.common.entity.table.Project;
 public interface ProjectMapper {
 
 	@Results({ @Result(property = "projectId", column = "project_id"),
-			@Result(property = "jobs", column = "project_id", many = @Many(select = "com.jay.kerrigan.master.mapper.JobMapper.fetchByProjectId")) })
+			@Result(property = "jobs", column = "project_id", many = @Many(select = "com.jay.kerrigan.master.mapper.JobMapper.fetchByProjectId")),
+			@Result(property = "files", column = "project_id", many = @Many(select = "com.jay.kerrigan.master.mapper.ProjectMapper.fetchFilesById")) })
 	@SelectProvider(type = ProjectProvider.class, method = "fetchAll")
 	List<Project> fetchAll();
 
@@ -26,6 +27,9 @@ public interface ProjectMapper {
 	@InsertProvider(type = ProjectProvider.class, method = "createProject")
 	int createProject(Project project);
 
+	@SelectProvider(type = ProjectProvider.class, method = "fetchFilesById")
+	List<String> fetchFilesById(int projectId);
+
 	class ProjectProvider {
 
 		public String fetchAll() {
@@ -34,6 +38,11 @@ public interface ProjectMapper {
 
 		public String fetchById() {
 			return new SQL().SELECT("*").FROM(Project.getTableName()).WHERE("project_id = #{projectId}").toString();
+		}
+
+		public String fetchFilesById() {
+			return new SQL().SELECT("file_path").FROM(Project.getProjectFilesTableName())
+					.WHERE("fk_project_id = #{projectId}").toString();
 		}
 
 		public String createProject(Project project) {
