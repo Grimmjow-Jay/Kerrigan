@@ -60,7 +60,7 @@ class TokenInterceptorHolder implements HandlerInterceptor {
 			throws Exception {
 
 		// KerriganSlave don't check token
-		if (Kerrigan.getKerriganRole() == KerriganSlave.class) {
+		if (Kerrigan.role == KerriganSlave.class) {
 			return true;
 		}
 

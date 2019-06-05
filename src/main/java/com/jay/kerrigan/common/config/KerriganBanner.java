@@ -14,7 +14,7 @@ public class KerriganBanner implements Banner {
 	@Override
 	public void printBanner(Environment environment, Class<?> sourceClass, PrintStream stream) {
 		stream.println();
-		if (Kerrigan.getKerriganRole() == KerriganMaster.class) {
+		if (Kerrigan.role == KerriganMaster.class) {
 			stream.println("  ██ ▄█▀▓█████  ██▀███   ██▀███   ██▓  ▄████  ▄▄▄       ███▄    █  ");
 			stream.println("  ██▄█▒ ▓█   ▀ ▓██ ▒ ██▒▓██ ▒ ██▒▓██▒ ██▒ ▀█▒▒████▄     ██ ▀█   █  ");
 			stream.println(" ▓███▄░ ▒███   ▓██ ░▄█ ▒▓██ ░▄█ ▒▒██▒▒██░▄▄▄░▒██  ▀█▄  ▓██  ▀█ ██▒ ");
@@ -25,7 +25,7 @@ public class KerriganBanner implements Banner {
 			stream.println(" ░ ░░ ░    ░     ░░   ░   ░░   ░  ▒ ░░ ░   ░   ░   ▒      ░   ░ ░  ");
 			stream.println(" ░  ░      ░  ░   ░        ░      ░        ░       ░  ░         ░  ");
 		}
-		if (Kerrigan.getKerriganRole() == KerriganSlave.class) {
+		if (Kerrigan.role == KerriganSlave.class) {
 			stream.println("  ██ ▄█▀▓█████  ██▀███   ██▀███   ██▓  ▄████  ▄▄▄       ███▄    █  ");
 			stream.println("  ██▄█▒ ▓█   ▀ ▓██ ▒ ██▒▓██ ▒ ██▒▓██▒ ██▒ ▀█▒▒████▄     ██ ▀█   █  ");
 			stream.println(" ▓███▄░ ▒███   ▓██ ░▄█ ▒▓██ ░▄█ ▒▒██▒▒██░▄▄▄░▒██  ▀█▄  ▓██  ▀█ ██▒ ");

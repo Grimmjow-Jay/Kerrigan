@@ -27,7 +27,7 @@ public class KerriganConfig {
 
 		loadDefaultConfig();
 
-		if (KerriganMaster.class == Kerrigan.getKerriganRole()) {
+		if (KerriganMaster.class == Kerrigan.role) {
 			loadMasterDefaultConfig();
 			loadConfigFromFile("classpath:config/kerrigan-master.conf");
 			properties.loadDefaultComplated = true;
@@ -69,7 +69,7 @@ public class KerriganConfig {
 	private static void loadDefaultConfig() {
 		properties.put("logging.config", "classpath:config/logback-config.xml");
 		properties.put("log.path", "log");
-		properties.put("log.file.pattern", Kerrigan.getKerriganRole().getSimpleName() + ".%d{yyyy-MM-dd}.log");
+		properties.put("log.file.pattern", Kerrigan.role.getSimpleName() + ".%d{yyyy-MM-dd}.log");
 	}
 
 	private static void loadMasterDefaultConfig() {

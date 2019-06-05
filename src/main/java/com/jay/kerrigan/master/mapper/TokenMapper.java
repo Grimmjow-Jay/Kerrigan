@@ -35,13 +35,23 @@ public interface TokenMapper {
 	class TokenProvider {
 
 		public String getByUserNameAndHost(String userName, String host) {
-			return new SQL().SELECT("*").FROM(Token.getTableName()).WHERE("user_name=#{userName}", "host=#{host}")
-					.toString();
+			return new SQL() {
+				{
+					SELECT("*");
+					FROM(Token.getTableName());
+					WHERE("user_name=#{userName}", "host=#{host}");
+				}
+			}.toString();
 		}
 
 		public String getByHostAndTokenId(String host, String tokenId) {
-			return new SQL().SELECT("*").FROM(Token.getTableName()).WHERE("host = #{host}", "token_id = #{tokenId}")
-					.toString();
+			return new SQL() {
+				{
+					SELECT("*");
+					FROM(Token.getTableName());
+					WHERE("host = #{host}", "token_id = #{tokenId}");
+				}
+			}.toString();
 		}
 
 		public String insertToken(Token token) {

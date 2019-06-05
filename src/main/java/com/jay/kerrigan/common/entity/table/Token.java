@@ -31,10 +31,4 @@ public class Token implements Serializable {
 		this.updateDate = updateDate;
 	}
 
-	@Override
-	public String toString() {
-		return "Token [tokenId=" + tokenId + ", host=" + host + ", userName=" + userName + ", createDate=" + createDate
-				+ ", updateDate=" + updateDate + "]";
-	}
-
 }

@@ -1,5 +1,8 @@
 package com.jay.kerrigan;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
 import org.springframework.beans.BeansException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContextException;
@@ -12,7 +15,7 @@ import com.jay.kerrigan.slave.KerriganSlave;
 
 public class Kerrigan {
 
-	private static Class<? extends Kerrigan> kerriganRole;
+	public static final Class<? extends Kerrigan> role = null;
 	private static ConfigurableApplicationContext applicationContext;
 
 	public static void main(String[] args) throws Exception {
@@ -21,22 +24,31 @@ public class Kerrigan {
 			throw new Exception("Input args : master or slave");
 		}
 		if ("master".equalsIgnoreCase(args[0])) {
-			kerriganRole = KerriganMaster.class;
+			setKerriganRole(KerriganMaster.class);
 		} else if ("slave".equalsIgnoreCase(args[0])) {
-			kerriganRole = KerriganSlave.class;
+			setKerriganRole(KerriganSlave.class);
 		} else {
 			throw new Exception("Input args : master or slave");
 		}
 
 		KerriganConfig.loadConfig();
-		SpringApplication kerriganApp = new SpringApplication(kerriganRole);
+		SpringApplication kerriganApp = new SpringApplication(role);
 		kerriganApp.setBanner(new KerriganBanner());
 		kerriganApp.setDefaultProperties(KerriganConfig.getAllConfig());
 		applicationContext = kerriganApp.run();
 	}
 
-	public static Class<? extends Kerrigan> getKerriganRole() {
-		return kerriganRole;
+	private static void setKerriganRole(Class<? extends Kerrigan> kerriganRole) {
+		try {
+			Field roleField = Kerrigan.class.getField("role");
+			roleField.setAccessible(true);
+			Field modifiersField = Field.class.getDeclaredField("modifiers");
+			modifiersField.setAccessible(true);
+			modifiersField.setInt(roleField, roleField.getModifiers() & ~Modifier.FINAL);
+			roleField.set(null, kerriganRole);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+			// Not going to happen
+		}
 	}
 
 	public static <T> T getBean(Class<T> requiredType) throws BeansException {

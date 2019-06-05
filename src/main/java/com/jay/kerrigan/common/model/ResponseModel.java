@@ -31,10 +31,6 @@ public class ResponseModel<T> {
 		return new ResponseModel<T>(true, "success", HttpStatus.OK, data);
 	}
 
-	public static <T> ResponseModel<T> error() {
-		return error("error");
-	}
-
 	public static <T> ResponseModel<T> error(String message) {
 		return new ResponseModel<T>(false, message, HttpStatus.OK, null);
 	}
